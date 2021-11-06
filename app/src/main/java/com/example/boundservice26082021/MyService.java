@@ -85,15 +85,15 @@ public class MyService extends Service {
                         if(onListenerCountChange != null){
                             onListenerCountChange.onChanged(i);
                         }
+                        Message message = new Message();
+                        message.what = 1;
+                        message.obj = i;
+                        handler.dispatchMessage(message);
                         try {
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        Message message = new Message();
-                        message.what = 1;
-                        message.obj = i;
-                        handler.dispatchMessage(message);
                     }
 
                 }

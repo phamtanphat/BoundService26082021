@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 public class MyService extends Service {
 
+    OnListenerCountChange onListenerCountChange;
 
     class MyBinder extends Binder {
         MyService getService() {
@@ -51,12 +52,16 @@ public class MyService extends Service {
                 public void run() {
                     isRunning = true;
                     for (int i = 0; i < 50; i++) {
+                        if(onListenerCountChange != null){
+                            onListenerCountChange.onChanged(i);
+                        }
                         try {
                             Thread.sleep(100);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
+
                 }
             });
             thread.start();
@@ -68,5 +73,13 @@ public class MyService extends Service {
     public void onDestroy() {
         Log.d("BBB","onDestroy");
         super.onDestroy();
+    }
+
+    interface OnListenerCountChange{
+        void onChanged(int count);
+    }
+
+    public void setOnListenerCountChange(OnListenerCountChange onListenerCountChange){
+        this.onListenerCountChange = onListenerCountChange;
     }
 }

@@ -39,6 +39,17 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             MyService.MyBinder myBinder = (MyService.MyBinder) service;
             MyService myService = myBinder.getService();
+            myService.setOnListenerCountChange(new MyService.OnListenerCountChange() {
+                @Override
+                public void onChanged(int count) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mTvCount.setText("Count = " + count);
+                        }
+                    });
+                }
+            });
         }
 
         @Override

@@ -14,14 +14,16 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button mBtnStartService;
+    Button mBtnStartService,mBtnunBindService;
     TextView mTvCount;
+    boolean mBound;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mBtnStartService = findViewById(R.id.buttonStartService);
+        mBtnunBindService = findViewById(R.id.buttonUnBindService);
         mTvCount = findViewById(R.id.textViewCount);
 
         mBtnStartService.setOnClickListener(new View.OnClickListener() {
@@ -32,6 +34,18 @@ public class MainActivity extends AppCompatActivity {
                 bindService(intent,serviceConnection, Context.BIND_AUTO_CREATE);
             }
         });
+
+        mBtnunBindService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mBound){
+                    unbindService(serviceConnection);
+                    mBound = false;
+                }
+            }
+        });
+
+
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -50,11 +64,12 @@ public class MainActivity extends AppCompatActivity {
                     });
                 }
             });
+            mBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
+            mBound = false;
         }
     };
 }

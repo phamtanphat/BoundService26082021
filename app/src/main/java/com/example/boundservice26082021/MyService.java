@@ -38,9 +38,16 @@ public class MyService extends Service {
     }
 
     @Override
-    public void unbindService(ServiceConnection conn) {
-        super.unbindService(conn);
-        Log.d("BBB","unBindservice");
+    public boolean onUnbind(Intent intent) {
+        Log.d("BBB","onUnbind");
+        onListenerCountChange = null;
+        return true;
+    }
+
+    @Override
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+        Log.d("BBB","onRebind");
     }
 
     @Override
@@ -51,12 +58,12 @@ public class MyService extends Service {
                 @Override
                 public void run() {
                     isRunning = true;
-                    for (int i = 0; i < 50; i++) {
+                    for (int i = 0; i < 100; i++) {
                         if(onListenerCountChange != null){
                             onListenerCountChange.onChanged(i);
                         }
                         try {
-                            Thread.sleep(100);
+                            Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
